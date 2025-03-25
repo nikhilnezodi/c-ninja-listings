@@ -11,7 +11,7 @@ AS                = $(TOOLCHAIN_PREFIX)as
 GCC               = $(TOOLCHAIN_PREFIX)gcc
 
 all: main.s
-	$(GCC)  -O0 -ggdb -nostdlib -march=rv32i -mabi=ilp32 -Wl,-Tmain.ld main.s -o main.elf
+	$(GCC)  -O0 -ggdb -nostdlib -march=rv32i -mabi=ilp32 main.s -o main.elf
 	$(OBJCOPY) -O binary main.elf main.bin
 	xxd -e -c 4 -g 4 main.bin
 

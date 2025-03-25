@@ -1,0 +1,108 @@
+1. Model of the Computer Systems
+
+____      Address Bus      ________
+    |  -----------------> |
+ CPU|    ----WR/RD-----   | Memory
+____|  <----------------> |_________
+         Data/Instruction
+              Bus
+
+- Address Bus is unidirectional
+- Instruction can only be fetched by the CPU
+- Data can be  read and written by CPU (bidirectional)
+
+
+=============================================================
+
+Makefile
+
+An automation tool to run certain commands.
+
+target: list of other targets or files (dependency list)
+    tab followed by command.
+
+target 2: dependecy_list
+    command_1
+    command_2
+    command_3
+
+When on command line, we just write make. it only executes first target in the makefile
+
+.PHONY: target_name
+
+What .PHONY does is, irrespective of the dependencies, please execute this target.
+
+
+to run a makefile (.mk):
+make -f filename target_name
+
+in Assemby file (.s)
+.globl label_name
+It is an assemby directive (basically anything that starts with a dot is an assemby directive)
+to declare a symbol as global, that should be found any where.
+
+
+
+=======================================
+
+Linker Script
+
+To control placement of code/data.
+-if -Wl,-tmain.ld removed
+ when running the make file. It throws error saying cannot find entry symbol start
+.global needs to be added in assembly file.
+
+======================================================================================
+Understanding Linker Scripts and Experiments
+
+https://ftp.gnu.org/old-gnu/Manuals/ld-2.9.1/html_mono/ld.html
+
+1. Linker Script is essentially input to the linker. Linker is the last stage of compilation flow.
+             .c              .i             .s              .o
+source file --> preprocessor ---> compiler --->  assembler ---> linker ---> executable
+
+Linker figures out the connection between the object files.
+
+object files has many regions. one of them being the .text section which has the executable code.
+
+Linker usually comes with its own linker Script.
+What we want to do is, overwrite that and use my linker script
+
+We can also instruct the linker wrt starting address of where it should put the code.
+
+linker script extension is .ld
+
+/* multiline comment */
+
+linker script is composed of commands and expressions.
+and special syntaxes
+
+MEMORY <- command
+{
+    RAM : ORIGIN = 0x80000000, LENGTH = 4k  <-- name(attributes) : ORIGIN = some_address, LENGTH = size_in_dec,hex;
+                                                 name can be lower/upper case, origin is allcaps
+                                                 attributes can be r,w,x
+
+}
+
+two memory devices - ROM(code) and SRAM (data and bss)
+
+now we have set the memory size of elf as 4k.
+To compose the contents of that elf in sections we use SECTIONS.
+SECTIONS <--command
+{
+.text : {   <-- first section I would like to have is the text section
+    *(.text*)  <-- * means everything
+    } > RAM    <-- create the text section which is composed of the text sections of all the files
+                    and put it in this memory region called RAM
+
+.nikhil: {
+    *(.nikhil)
+    } > RAM
+}
+
+
+To read elf file -> readelf -a -W filename.elf
+
+Keep the name of ld file as main.ld as any other name it doesn't find in the riscv path directory
+
