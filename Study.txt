@@ -106,3 +106,11 @@ To read elf file -> readelf -a -W filename.elf
 
 Keep the name of ld file as main.ld as any other name it doesn't find in the riscv path directory
 
+
+==========================================================
+A listing of standard RISC-V pseudoinstructions
+https://github.com/riscv-non-isa/riscv-asm-manual/blob/main/src/asm-manual.adoc
+
+
+RISC V Emulator
+https://eseo-tech.github.io/emulsiV/
